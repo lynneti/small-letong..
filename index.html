@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>small letong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  html, body {
+    width: 100%;
+    height: 100dvh;
+    background: #FFF;
+    overflow: hidden;
+  }
+
+  /* ---- one screen, never scrolls ---- */
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    background: #FFF;
+    overflow: hidden;
+  }
+
+  /* ================= menu bar ================= */
+  .menu {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    margin-left: -149px;
+    width: 298px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 5;
+  }
+
+  .menu button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+  }
+
+  .menu button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+
+  /* ================= HOME ================= */
+
+  /* heading + 6 faces, dead centre of the screen.
+     242px is the exact height of the cluster: from the top of
+     shareen's face down to the bottom of the :) face          */
+  .hero {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 242px;
+    transform: translateY(-50%);
+  }
+
+  .heading {
+    position: absolute;
+    top: 55px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 88.364px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  /* faces anchored to the centre line so they never shift with
+     viewport width; transform is left free for the hover slide */
+  .face {
+    position: absolute;
+    display: block;
+    z-index: 2;
+    user-select: none;
+    -webkit-user-drag: none;
+    transform: translate(0, 0);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .face--shareen { left: calc(50% + 235px);   top:   0px; width: 72px; height: 72px; }
+  .face--arnold  { left: calc(50% - 323.5px); top:  13px; width: 67px; height: 67px; }
+  .face--lzh     { left: calc(50% + 288px);   top:  82px; width: 70px; height: 70px; }
+  .face--keira   { left: calc(50% - 384px);   top:  83px; width: 72px; height: 72px; }
+  .face--verdine { left: calc(50% - 317px);   top: 159px; width: 76px; height: 76px; }
+  .face--smile   { left: calc(50% + 236px);   top: 170px; width: 72px; height: 72px; }
+
+  /* each face slides 20px away from the heading, in its own direction */
+  .face--arnold:hover  { transform: translate(-14.142px, -14.142px); } /* top left     */
+  .face--keira:hover   { transform: translate(-20px, 0);             } /* left         */
+  .face--verdine:hover { transform: translate(-14.142px,  14.142px); } /* bottom left  */
+  .face--shareen:hover { transform: translate( 14.142px, -14.142px); } /* top right    */
+  .face--lzh:hover     { transform: translate( 20px, 0);             } /* right        */
+  .face--smile:hover   { transform: translate( 14.142px,  14.142px); } /* bottom right */
+
+  @media (prefers-reduced-motion: reduce) {
+    .face { transition: none; }
+  }
+
+  /* start button: 30px below the cluster */
+  .start {
+    position: absolute;
+    top: calc(100% + 30px);
+    left: 50%;
+    margin-left: -116.5px;
+    width: 233px;
+    height: 50px;
+    border-radius: 26px;
+    border: 3px solid #000;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #FFF;
+    font-family: "Irish Grover", cursive;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    z-index: 3;
+  }
+
+  /* ================= GALLERY ================= */
+
+  .gallery {
+    position: absolute;
+    top: 51px;              /* clears the menu bar */
+    bottom: 0;
+    left: 50%;
+    margin-left: -557.55px; /* half of 1115.1 */
+    width: 1115.1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 60px;
+  }
+
+  /* month row — 1115.1 x 54, same width as the calendar */
+  .months {
+    display: flex;
+    width: 1115.1px;
+    height: 54px;
+    flex-direction: row;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .months button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: "Irish Grover", cursive;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: #C7C7C7;
+    transition: color 0.25s ease;
+  }
+
+  .months button[aria-current="true"] { color: #000; }
+  .months button:hover { color: #000; }
+  .months button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+
+  /* weekday header — 7 cells of 159.3 x 27 */
+  .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 159.3px);
+    width: 1115.1px;
+  }
+
+  .weekdays span {
+    display: flex;
+    width: 159.3px;
+    height: 27px;
+    flex-direction: column;
+    justify-content: center;
+    color: #000;
+    text-align: center;
+    font-family: "Irish Grover", cursive;
+    font-size: 13.5px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  /* the grid itself — cells are 159.3 x 127.8 (5.4 + 13 + 109.4) */
+  /* only this area scrolls — the month and weekday rows never move,
+     so August's 6th row can never push them out of position */
+  .grid-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 1115.1px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .grid {
+    display: grid;
+    align-content: start;
+    grid-template-columns: repeat(7, 159.3px);
+    width: 1115.1px;
+    border-bottom: 1px solid #000;
+  }
+
+  .cell {
+    position: relative;
+    width: 159.3px;
+    height: 127.8px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    overflow: hidden;
+  }
+
+  .cell:nth-child(7n) { border-right: 1px solid #000; }
+
+  /* date number, top right of its own box */
+  .cell .date {
+    position: absolute;
+    top: 5.4px;
+    right: 6.6px;
+    height: 13px;
+    color: #000;
+    text-align: right;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 13px;
+  }
+
+  .cell--open { cursor: pointer; }
+
+  /* June 1 — lzh sits on the left stroke of the box */
+  .entry-face {
+    position: absolute;
+    left: 0;
+    bottom: 20.8px;
+    width: 107px;
+    height: 107px;
+    z-index: 1;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* a one-off line of narration in the corner of a day */
+  .entry-note {
+    position: absolute;
+    right: 6.6px;
+    bottom: 6px;
+    max-width: 146px;
+    text-align: right;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px;
+  }
+
+  /* June 24 — arnold and lzh side by side */
+  .m24-lzh,
+  .m24-arnold {
+    position: absolute;
+    bottom: 18px;
+    width: 54px;
+    height: 54px;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .m24-lzh    { left: 22px; }
+  .m24-arnold { right: 22px; }
+
+  /* June 26 — the milestone box inverts */
+  .cell--milestone { background: #000; }
+  .cell--milestone .date { color: #FFF; }
+
+  .milestone-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    text-align: center;
+    font-family: "Irish Grover", cursive;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  /* June 25 — lzh up top, the other two fanned out below */
+  .m25-lzh,
+  .m25-arnold,
+  .m25-shareen {
+    position: absolute;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .m25-lzh {
+    top: 8px;
+    left: 50%;
+    margin-left: -23px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .m25-arnold {
+    left: 30px;
+    bottom: 16px;
+    width: 42px;
+    height: 42px;
+    transform: rotate(-30deg);
+  }
+
+  .m25-shareen {
+    right: 30px;
+    bottom: 16px;
+    width: 42px;
+    height: 42px;
+    transform: rotate(30deg);
+  }
+
+  /* …with the app badge tucked into the bottom right */
+  .entry-badge {
+    position: absolute;
+    right: 9.2px;
+    bottom: 7.8px;
+    width: 53px;
+    height: 53px;
+    z-index: 2;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  /* ================= SPOTIFY ================= */
+
+  .spotify {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    z-index: 4;
+  }
+
+  /* a drawn quaver pair — the only thing showing until it's clicked */
+  .spotify-toggle {
+    display: block;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+
+  .spotify-toggle:hover  { transform: scale(1.12) rotate(-8deg); }
+  .spotify-toggle:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+  .spotify-toggle svg    { display: block; width: 100%; height: 100%; }
+
+  .spotify-toggle .note-stems {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spotify-toggle .note-beam,
+  .spotify-toggle ellipse { fill: #000; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotify-toggle { transition: none; }
+  }
+
+  /* the real player, kept out of sight until asked for */
+  .spotify-panel {
+    position: absolute;
+    right: 0;
+    bottom: 62px;
+    width: 300px;
+    height: 152px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .spotify-panel iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Sits underneath the player. If the iframe loads it is covered; where
+     embeds are blocked (the artifact sandbox does this) it shows through,
+     so the panel is never just an empty box. */
+  .spotify-link {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    color: #FFF;
+    font-family: "Irish Grover", cursive;
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  /* ================= BUBBLE COMPONENT =================
+     A drawn speech bubble, no image needed. The outline is one SVG path
+     stretched to whatever the text needs; non-scaling-stroke keeps the
+     line weight even however far it stretches. Tail sits bottom left. */
+
+  .bubble {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 20px 24px 32px 38px;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-weight: 400;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .bubble-shape {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .bubble-shape path {
+    fill: #FFF;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .bubble-text { position: relative; }
+
+  /* mirrored, for characters sitting near the right edge */
+  .bubble--flip { padding: 20px 38px 32px 24px; }
+  .bubble--flip .bubble-shape { transform: scaleX(-1); }
+
+  /* ================= CORNER MASCOT ================= */
+
+  .mascot {
+    position: absolute;
+    left: 10px;
+    bottom: 20px;
+    z-index: 4;
+    width: 200px;
+    height: 78px;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;                /* face to bubble */
+    user-select: none;
+  }
+
+  .mascot img { display: block; -webkit-user-drag: none; }
+
+  .mascot-face   { width: 78px;  height: 78px; }
+  .mascot-bubble {
+    width: 117px;                    /* 78 + 5 + 117 = 200 */
+    padding: 12px 12px 20px 22px;
+    font-size: 10px;
+    transition: opacity 0.3s ease;
+  }
+
+  .mascot-bubble.swapping { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mascot-bubble { transition: none; }
+  }
+
+  /* ================= AUTHOR'S WORD ================= */
+
+  /* a drawn pill, shared by the language buttons and the back button */
+  .pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-weight: 400;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .pill:hover { transform: translateY(-3px); }
+  .pill:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+
+  .pill-shape { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .pill-shape path {
+    fill: #FFF;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pill-label { position: relative; display: flex; align-items: center; }
+
+  @media (prefers-reduced-motion: reduce) { .pill { transition: none; } }
+
+  /* --- entry: pick a language, face underneath --- */
+  .author-entry {
+    position: absolute;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+  }
+
+  .lang-picker { display: flex; gap: 46px; }
+
+  .lang-picker .pill { width: 128px; height: 59px; font-size: 22px; }
+
+  .author-entry .author-face { width: 130px; height: 130px; }
+
+  /* --- the letter --- */
+  .author-letter {
+    position: absolute;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;              /* the face keeps 60px clear of the card */
+  }
+
+  /* face sits at the vertical centre of the frame, dots below it */
+  .author-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    flex: 0 0 auto;
+  }
+
+  .author-aside .author-face { width: 128px; height: 128px; }
+
+  .author-dots { display: flex; gap: 14px; }
+
+  .author-dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #000;
+    animation: dotpulse 1.4s ease-in-out infinite;
+  }
+
+  .author-dots i:nth-child(2) { animation-delay: 0.2s; }
+  .author-dots i:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotpulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .author-dots i { animation: none; opacity: 1; }
+  }
+
+  .letter-card {
+    position: relative;
+    flex: 0 0 auto;
+    width: 1000px;
+    height: 620px;
+    padding: 66px 60px 0;
+    border: 2px solid #000;
+    border-radius: 28px;
+    background: #FFF;
+  }
+
+  .letter-body {
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.45;
+    white-space: pre-wrap;   /* blank lines in the text become real gaps */
+  }
+
+  .letter-card .pill {
+    position: absolute;
+    left: 60px;
+    bottom: 46px;
+    width: 110px;
+    height: 48px;
+  }
+
+  .back-arrow { width: 34px; height: 16px; }
+
+  .back-arrow path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .letter-sign {
+    position: absolute;
+    right: 60px;
+    bottom: 54px;
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 26px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .letter-sign.show { opacity: 1; }
+
+  /* ================= GAME ================= */
+
+  .game {
+    position: absolute;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1150px;
+    aspect-ratio: 1150 / 610;
+    flex: 0 0 auto;
+    touch-action: none;
+  }
+
+  /* Curve and items share one box, so they can only scale together.
+     Its aspect-ratio is the curve's own 1058 x 231 viewBox, which makes
+     every % below resolve against the same geometry at any width.
+     No overflow:hidden here on purpose — items stand above the curve. */
+  .table-scene {
+    position: absolute;
+    left: 7.1304%;      /* 82 / 1150 */
+    top: 26.0656%;      /* 159 / 610 */
+    width: 92%;         /* 1058 / 1150 */
+    aspect-ratio: 1058 / 231;
+  }
+
+  .game-table {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .game-table path {
+    fill: #FFF;
+    stroke: #000;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* the host up top */
+  .host-face {
+    position: absolute;
+    z-index: 2;
+    left: 45.2174%;     /* 520 / 1150 */
+    top: 9.8361%;       /* 60 / 610 */
+    width: 9.8261%;     /* 113 / 1150 */
+    aspect-ratio: 1;
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .host-bubble {
+    position: absolute;
+    left: 55.3043%;     /* 636 / 1150 */
+    top: 0;
+    width: 17.0435%;    /* 196 / 1150 */
+    font-size: 15px;
+  }
+
+  /* the five who get fed */
+  .eater {
+    position: absolute;
+    user-select: none;
+  }
+
+  .eater img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    -webkit-user-drag: none;
+    transition: transform 0.25s ease;
+  }
+
+  .eater--munch img { transform: scale(1.12); }
+
+  .eater-bubble {
+    position: absolute;
+    left: 76%;
+    bottom: 74%;
+    width: 178px;
+    font-size: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 3;
+  }
+
+  .eater-bubble.show { opacity: 1; }
+
+  .eater--flip .eater-bubble { left: auto; right: 76%; }
+
+  .eater { aspect-ratio: 1; height: auto; }
+
+  .eater--arnold  { left:  0.3478%; top: 55.2459%; width: 10.5217%; }
+  .eater--keira   { left: 21.9130%; top: 71.3115%; width: 11.8261%; }
+  .eater--shareen { left: 46.2609%; top: 76.2295%; width: 11.8261%; }
+  .eater--lzh     { left: 65.5652%; top: 67.8689%; width: 10.8696%; }
+  .eater--verdine { left: 83.4783%; top: 67.3770%; width: 10.8696%; }
+
+  /* items laid along the table */
+  /* left/top/width are all % of .table-scene, written by layItems().
+     `translate` anchors the item by its bottom centre, so left/top is
+     the point where it TOUCHES the curve rather than its top-left
+     corner — which is what kept square items floating above the line.
+     `translate` is its own property, leaving `transform` free for
+     hover, drag and the eaten animation to use without clobbering it. */
+  .item {
+    position: absolute;
+    display: block;
+    height: auto;
+    translate: -50% -100%;
+    cursor: grab;
+    z-index: 2;
+    -webkit-user-drag: none;
+    transition: transform 0.2s ease;
+  }
+
+  .item:hover { transform: translateY(-6px); }
+
+  .item.dragging {
+    cursor: grabbing;
+    z-index: 40;
+    transition: none;
+  }
+
+  .item.eaten {
+    opacity: 0;
+    transform: scale(0.3);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  /* ================= STORY OVERLAY ================= */
+
+  /* the calendar, month row and weekday row go soft behind the story */
+  .stage.story-open .menu,
+  .stage.story-open .mascot,
+  .stage.story-open .spotify,
+  .stage.story-open .gallery {
+    filter: blur(5px);
+    pointer-events: none;
+  }
+
+  .story {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .story-photo {
+    position: absolute;
+    top: 0;
+    bottom: 171px;          /* 147 narrator box + 24 breathing room */
+    left: 0;
+    width: 100%;
+    padding: 44px 305px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .story-photo img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 20px;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* pictures side by side share the width evenly, however many there are */
+  .story-photo--multi img {
+    max-width: calc((100% - (var(--cols) - 1) * 24px) / var(--cols));
+  }
+
+  /* narrator box */
+  .narrator {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    margin-left: -640px;    /* half of 1280 */
+    width: 1280px;
+    height: 147px;
+    padding: 30px 20px 0;   /* fixed 30px top, 20px either side */
+    border: 2px solid #000;
+    border-radius: 26px;
+    background: #FFF;
+    overflow: hidden;
+  }
+
+  /* clipped to exactly 3 lines — the text can never spill out of the box */
+  .narrator-text,
+  .narrator-measure {
+    width: 1236px;          /* 1280 - 2 border - 2 border - 20 - 20 */
+    color: #000;
+    font-family: "Irish Grover", cursive;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+  }
+
+  .narrator-text {
+    max-height: 96px;       /* 3 x 32 */
+    overflow: hidden;
+  }
+
+  /* off-screen twin used to work out where the line breaks fall */
+  .narrator-measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  /* close button — the only way out of the story */
+  .story-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 12;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid #000;
+    background: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: breathe 2.6s ease-in-out infinite;
+  }
+
+  .story-close svg { width: 22px; height: 22px; display: block; }
+
+  .story-close line {
+    stroke: #000;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+
+  .story-close:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.09); }
+  }
+
+  .caret {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    margin-left: 2px;
+    background: #000;
+    vertical-align: -3px;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .caret { animation: none; }
+    .story-close { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="stage">
+
+    <nav class="menu">
+      <button type="button" data-go="game">Game</button>
+      <button type="button" id="menuMiddle" data-go="home">Home</button>
+      <button type="button" data-go="author">:)</button>
+    </nav>
+
+    <!-- ============ HOME ============ -->
+    <section class="view" id="viewHome">
+      <div class="hero">
+
+        <img class="face face--shareen" src="assets/shareen.png" alt="Shareen" />
+        <img class="face face--arnold"  src="assets/arnold.png"  alt="Arnold" />
+        <img class="face face--lzh"     src="assets/lzh.png"     alt="LZH" />
+        <img class="face face--keira"   src="assets/keira.png"   alt="Keira" />
+        <img class="face face--verdine" src="assets/verdine.png" alt="Verdine" />
+        <img class="face face--smile"   src="assets/face-smile.png"      alt=":)" />
+
+        <h1 class="heading">small letong</h1>
+
+        <button class="start" type="button" id="startBtn">START</button>
+
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="view gallery" id="viewGallery" hidden>
+
+      <div class="months" id="months"></div>
+
+      <div class="weekdays">
+        <span>Mon</span><span>Tue</span><span>Wed</span>
+        <span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+      </div>
+
+      <div class="grid-scroll">
+        <div class="grid" id="grid"></div>
+      </div>
+
+    </section>
+
+    <div class="mascot">
+      <img class="mascot-face" src="assets/face-smile.png" alt="" />
+      <div class="bubble mascot-bubble" id="mascotBubble"></div>
+    </div>
+
+    <div class="spotify">
+      <div class="spotify-panel" id="spotifyPanel" hidden>
+        <a class="spotify-link" id="spotifyLink" href="#" target="_blank" rel="noopener noreferrer">our playlist ♫</a>
+        <iframe id="spotifyPlayer" title="Spotify" loading="lazy" allowfullscreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+
+      <button class="spotify-toggle" id="spotifyToggle" type="button"
+              aria-expanded="false" aria-controls="spotifyPanel" aria-label="Play our playlist">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path class="note-stems" d="M10 18.6V5.6l11-2.3v13" />
+          <path class="note-beam"  d="M10 5.6l11-2.3v3.4l-11 2.3z" />
+          <ellipse cx="7"  cy="18.6" rx="3.4" ry="2.7" transform="rotate(-16 7 18.6)" />
+          <ellipse cx="18" cy="16.3" rx="3.4" ry="2.7" transform="rotate(-16 18 16.3)" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ============ AUTHOR'S WORD ============ -->
+    <section class="view" id="viewAuthor" hidden>
+
+      <div class="author-entry" id="authorEntry">
+        <div class="lang-picker" id="langPicker">
+          <button class="pill" type="button" data-lang="zh"></button>
+          <button class="pill" type="button" data-lang="en"></button>
+          <button class="pill" type="button" data-lang="id"></button>
+        </div>
+        <img class="author-face" src="assets/face-smile.png" alt="" />
+      </div>
+
+      <div class="author-letter" id="authorLetter" hidden>
+        <div class="author-aside">
+          <img class="author-face" src="assets/face-smile.png" alt="" />
+          <div class="author-dots"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="letter-card">
+          <div class="letter-body" id="letterBody"></div>
+          <button class="pill" type="button" id="letterBack" aria-label="Back to languages"></button>
+          <span class="letter-sign" id="letterSign">--Letong(Lyn)</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ GAME ============ -->
+    <section class="view game" id="viewGame" hidden>
+      <div class="game-stage" id="gameStage">
+
+        <img class="host-face" src="assets/face-smile.png" alt="" />
+        <div class="bubble host-bubble">EVERYONE ANJING</div>
+
+        <!-- The table, drawn. Its top edge is the first six curves below;
+             those exact control points are mirrored in TOP_EDGE in the
+             script, which is how items are seated on the real line. -->
+        <div class="table-scene" id="tableScene">
+        <svg class="game-table" viewBox="0 0 1058 231" aria-hidden="true">
+          <path d="M3 72
+                   C45 40 92 10 128 5
+                   C168 0 240 38 320 68
+                   C390 94 458 105 525 105
+                   C592 105 660 94 730 68
+                   C810 38 882 0 922 5
+                   C962 10 1020 55 1048 110
+                   C1054 122 1046 133 1024 146
+                   C940 194 720 228 525 228
+                   C330 228 175 172 74 116
+                   C44 99 20 85 3 72 Z" />
+        </svg>
+        </div>
+
+        <div class="eater eater--arnold"  data-who="arnold"><img src="assets/arnold.png"  alt="Arnold" /></div>
+        <div class="eater eater--keira"   data-who="keira"><img src="assets/keira.png"    alt="Keira" /></div>
+        <div class="eater eater--shareen" data-who="shareen"><img src="assets/shareen.png" alt="Shareen" /></div>
+        <div class="eater eater--lzh"     data-who="lzh"><img src="assets/lzh.png"        alt="LZH" /></div>
+        <div class="eater eater--verdine eater--flip" data-who="verdine"><img src="assets/verdine.png" alt="Verdine" /></div>
+
+      </div>
+    </section>
+
+    <!-- ============ STORY OVERLAY ============ -->
+    <div class="story" id="story" hidden>
+      <button class="story-close" id="storyClose" type="button" aria-label="Close story">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="7" y1="7" x2="17" y2="17" />
+          <line x1="17" y1="7" x2="7" y2="17" />
+        </svg>
+      </button>
+
+      <div class="story-photo" id="storyPhoto"></div>
+      <div class="narrator">
+        <div class="narrator-text" id="narratorText"></div>
+        <div class="narrator-measure" id="narratorMeasure"></div>
+      </div>
+    </div>
+
+  </main>
+
+<script>
+  /* ---------- calendar data ---------- */
+  var MONTHS = [
+    { name: "June",   year: 2026, month: 6, startDay: 0, days: 30 }, /* Mon */
+    { name: "July",   year: 2026, month: 7, startDay: 2, days: 31 }, /* Wed */
+    { name: "August", year: 2026, month: 8, startDay: 5, days: 31 }  /* Sat */
+  ];
+
+  /* what lives in a given cell, keyed "month-day" */
+  var ENTRIES = {
+    "6-1": [
+      { cls: "entry-face",  src: "assets/lzh.png",     alt: "LZH" },
+      { cls: "entry-badge", src: "assets/badge-rednote.png", alt: "Xiaohongshu" }
+    ],
+    "6-24": [
+      { cls: "m24-lzh",    src: "assets/lzh.png",    alt: "LZH" },
+      { cls: "m24-arnold", src: "assets/arnold.png", alt: "Arnold" }
+    ],
+    "6-25": [
+      { cls: "m25-lzh",     src: "assets/lzh.png",     alt: "LZH" },
+      { cls: "m25-arnold",  src: "assets/arnold.png",  alt: "Arnold" },
+      { cls: "m25-shareen", src: "assets/shareen.png", alt: "Shareen" }
+    ]
+  };
+
+  /* days that invert into a black milestone box */
+  var MILESTONES = { "6-26": "Milestone 1" };
+
+  /* a line of text tucked into the bottom right of a day */
+  var NOTES = {};
+
+  /* the story each day opens into, keyed the same way */
+  var STORIES = {
+    "6-1": {
+      photos: ["assets/day-01-rednote.png"],
+      alt: "Rednote DM with Zhi Hao, 06-01",
+      text: "Lyn: Everything started with Zhi Hao DM on chinese rednote; where i posted finding people inside Alibaba, Little did i know how many great people i am going to meet in my life that i will never forget. Thanks Zhi hao :)"
+    },
+    "6-24": {
+      photos: ["assets/day-24-lunch.jpg", "assets/day-24-outside.jpg"],
+      alt: "Lunch, and the smoke spot outside",
+      text: "Lyn: Are we the first interns who smoke and had lunch with the HR?"
+    },
+    "6-25": {
+      photos: ["assets/day-25-shareen.png"],
+      alt: "Meeting Shareen",
+      text: "Lyn: yay! New character unlocked: Miss Williem. Who works hard, studies hard, and smoke hard. I felt in love with her e-cig (still dont know the name)"
+    },
+    "6-26": {
+      photos: ["assets/day-26-chat.jpg", "assets/day-26-shots.jpg", "assets/day-26-bar.jpg"],
+      alt: "The night small letong was born",
+      text: [
+        "SMALL LETONG was born in this day; (original smoke group)",
+        "first round of puff and drinking\uD83D\uDC45"
+      ]
+    }
+  };
+
+  var monthsEl = document.getElementById("months");
+  var gridEl   = document.getElementById("grid");
+  var current  = 0;
+
+  function renderMonths() {
+    monthsEl.innerHTML = "";
+    MONTHS.forEach(function (m, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = m.name;
+      b.setAttribute("aria-current", i === current ? "true" : "false");
+      b.addEventListener("click", function () { current = i; render(); });
+      monthsEl.appendChild(b);
+    });
+  }
+
+  function renderGrid() {
+    var m    = MONTHS[current];
+    var rows = Math.ceil((m.startDay + m.days) / 7);
+    gridEl.innerHTML = "";
+
+    for (var i = 0; i < rows * 7; i++) {
+      var day  = i - m.startDay + 1;
+      var cell = document.createElement("div");
+
+      cell.className = "cell";
+
+      if (day < 1 || day > m.days) {
+        gridEl.appendChild(cell);   /* empty box, strokes intact */
+        continue;
+      }
+
+      var n = document.createElement("span");
+      n.className = "date";
+      n.textContent = day;
+      cell.appendChild(n);
+
+      var key   = m.month + "-" + day;
+      var items = ENTRIES[key];
+
+      if (STORIES[key]) {
+        cell.classList.add("cell--open");
+        cell.addEventListener("click", function (k) {
+          return function () { openStory(k); };
+        }(key));
+      }
+
+      if (items) {
+        items.forEach(function (it) {
+          var img = document.createElement("img");
+          img.className = it.cls;
+          img.src = it.src;
+          img.alt = it.alt;
+          cell.appendChild(img);
+        });
+      }
+
+      if (MILESTONES[key]) {
+        cell.classList.add("cell--milestone");
+        var ms = document.createElement("div");
+        ms.className = "milestone-label";
+        ms.textContent = MILESTONES[key];
+        cell.appendChild(ms);
+      }
+
+      if (NOTES[key]) {
+        var note = document.createElement("div");
+        note.className = "entry-note";
+        note.textContent = NOTES[key];
+        cell.appendChild(note);
+      }
+
+      gridEl.appendChild(cell);
+    }
+  }
+
+  function render() { renderMonths(); renderGrid(); }
+
+  /* ---------- spotify ----------
+     Paste any Spotify link here — the share link or the embed one, for a
+     playlist, album, track or artist. Both forms below are derived from it. */
+  var SPOTIFY_URL = "https://open.spotify.com/embed/playlist/1RdOOYpgnP5u2Qq7ovHPjM?utm_source=generator&theme=0&si=80d56fd19eef4826";
+
+  (function () {
+    var toggle = document.getElementById("spotifyToggle");
+    var panel  = document.getElementById("spotifyPanel");
+    var frame  = document.getElementById("spotifyPlayer");
+
+    document.getElementById("spotifyLink").href =
+      SPOTIFY_URL.replace("/embed/", "/");
+
+    toggle.addEventListener("click", function () {
+      var open = panel.hidden;
+      /* Spotify isn't contacted at all until the note is clicked */
+      if (open && !frame.src) {
+        frame.src = SPOTIFY_URL.replace(
+          /open\.spotify\.com\/(?!embed\/)/, "open.spotify.com/embed/");
+      }
+      panel.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+  })();
+
+  /* ---------- bubble component ----------
+     buildBubble(el, text) turns any element into a drawn speech bubble. */
+  var BUBBLE_PATH =
+    "M72 24C120 8 190 4 244 10c44 5 70 24 71 52 1 30-15 50-47 58" +
+    "-38 10-108 12-150 7-12-1-24-5-34-11-22 10-54 23-74 25" +
+    "-7 0-8-5-3-11 13-16 33-32 40-40-6-16-9-46 1-57 6-6 14-8 24-9z";
+
+  function buildBubble(el, text) {
+    el.innerHTML =
+      '<svg class="bubble-shape" viewBox="0 0 319 143" preserveAspectRatio="none">' +
+      '<path d="' + BUBBLE_PATH + '"/></svg><span class="bubble-text"></span>';
+    el.querySelector(".bubble-text").textContent = text;
+    return el;
+  }
+
+  /* ---------- corner mascot ---------- */
+  var BUBBLES = [
+    "I'm still filling up the content...",
+    "this website is still under construction",
+    "\u8C22\u8C22\u5149\u4E34\uFF5E\u5E0C\u671B\u4F60\u559C\u6B22"
+  ];
+  var bubbleEl = document.getElementById("mascotBubble");
+
+  var bubbleIdx = Math.floor(Math.random() * BUBBLES.length);
+
+  function shuffleBubble(instant) {
+    var next = bubbleIdx;
+    while (next === bubbleIdx && BUBBLES.length > 1) {
+      next = Math.floor(Math.random() * BUBBLES.length);
+    }
+    bubbleIdx = next;
+
+    if (instant) {
+      buildBubble(bubbleEl, BUBBLES[bubbleIdx]);
+      return;
+    }
+
+    bubbleEl.classList.add("swapping");
+    setTimeout(function () {
+      buildBubble(bubbleEl, BUBBLES[bubbleIdx]);
+      bubbleEl.classList.remove("swapping");
+    }, 300);
+  }
+
+  setInterval(shuffleBubble, 5000);
+
+  /* ---------- author's word ---------- */
+  var PILL_PATH =
+    "M42 5C72 2 106 2 132 5C154 8 166 21 165 39" +
+    "C164 57 152 70 128 73C99 77 65 77 40 73" +
+    "C18 70 5 56 6 38C7 21 20 8 42 5Z";
+
+  function buildPill(el, label) {
+    el.innerHTML =
+      '<svg class="pill-shape" viewBox="0 0 170 78" preserveAspectRatio="none">' +
+      '<path d="' + PILL_PATH + '"/></svg><span class="pill-label"></span>';
+    var slot = el.querySelector(".pill-label");
+    if (typeof label === "string") slot.textContent = label;
+    else slot.appendChild(label);
+    return el;
+  }
+
+  var LANGS = { zh: "\u4E2D\u6587", en: "English", id: "Bahasa" };
+
+  var LETTERS = {
+    zh: ["\u54C8\u54C8\uFF0C \u64CD\u4F60\u5988."],
+    en: [
+      "Hellooo",
+      "All jokes aside",
+      "Thank you so much for this journey.",
+      "This website is made for you, for the memory, this internship, and our friendship :)"
+    ],
+    id: [
+      "there is no indo version becuase i dont know any.",
+      "but words i learned: Di Mana, Si apa, Kontol bau? JD.. JD ga Ken Mana ANJINGGGGGGGGGGGG."
+    ]
+  };
+
+  var authorEntry  = document.getElementById("authorEntry");
+  var authorLetter = document.getElementById("authorLetter");
+  var letterBody   = document.getElementById("letterBody");
+  var letterSign   = document.getElementById("letterSign");
+  var letterTimer  = null;
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll("#langPicker .pill"), function (b) {
+      buildPill(b, LANGS[b.dataset.lang]);
+      b.addEventListener("click", function () { openLetter(b.dataset.lang); });
+    });
+
+  (function () {
+    var back = document.getElementById("letterBack");
+    var svg  = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "back-arrow");
+    svg.setAttribute("viewBox", "0 0 34 16");
+    svg.innerHTML = '<path d="M33 8H2M10 1L2 8l8 7"/>';
+    buildPill(back, svg);
+    back.addEventListener("click", showPicker);
+  })();
+
+  function showPicker() {
+    clearTimeout(letterTimer);
+    authorLetter.hidden = true;
+    authorEntry.hidden  = false;
+    letterBody.textContent = "";
+    letterSign.classList.remove("show");
+  }
+
+  function openLetter(lang) {
+    clearTimeout(letterTimer);
+    authorEntry.hidden  = true;
+    authorLetter.hidden = false;
+    letterSign.classList.remove("show");
+
+    /* blank lines between paragraphs; white-space: pre-wrap renders them */
+    var full = LETTERS[lang].join("\n\n");
+    var i    = 0;
+
+    (function step() {
+      if (i <= full.length) {
+        letterBody.textContent = full.slice(0, i);
+        letterBody.appendChild(caret());
+        i++;
+        letterTimer = setTimeout(step, 30);
+        return;
+      }
+      letterBody.textContent = full;          /* drop the caret when done */
+      letterSign.classList.add("show");
+    })();
+  }
+
+  /* ---------- the feeding game ---------- */
+  /* ratio = natural width / height, so nothing gets squashed */
+  var ITEMS = [
+    { src: "assets/item-01.png",       ratio: 157 / 181 },
+    { src: "assets/item-02.png",       ratio: 146 / 173 },
+    { src: "assets/item-03.png",       ratio: 138 / 176 },
+    { src: "assets/item-04.png",       ratio: 171 / 193 },
+    { src: "assets/item-05.png",    ratio: 112 / 166 },
+    { src: "assets/item-06.png",    ratio: 123 / 172 },
+    { src: "assets/item-07.png",    ratio: 163 / 220 },
+    { src: "assets/item-08.png",    ratio: 125 / 187 },
+    { src: "assets/item-mic.png",         ratio: 1 },
+    { src: "assets/item-09.png", ratio: 117 / 159 },
+    { src: "assets/item-10.png", ratio: 228 / 130 },
+    { src: "assets/badge-rednote.png",       ratio: 1 },
+    { src: "assets/item-sticky.png",      ratio: 1 }
+  ];
+
+  /* placeholder lines — swap these for whatever each of them would say */
+  var RESPONSES = {
+    arnold:  ["thank you", "ayy thanks", "mmm"],
+    keira:   ["thank you", "ty!!", "yum"],
+    shareen: ["thank you", "thanks!", "mmm"],
+    lzh:     ["thank you", "\u8c22\u8c22", "nice"],
+    verdine: ["thank you", "appreciate it", "let's go"]
+  };
+
+  var gameStage  = document.getElementById("gameStage");
+  var tableScene = document.getElementById("tableScene");
+
+  /* The table's top edge, lifted verbatim from the <path> above. Seating
+     items on the real curve instead of an approximation of it is what
+     keeps them on the line — a parabola matched the middle and drifted
+     at the ends, which is where items used to slide off. */
+  var SCENE = { w: 1058, h: 231 };
+
+  /* Both edges of the drawn table, lifted verbatim from the <path>.
+     TOP runs left to right; BOTTOM is the same path's underside, listed
+     left to right too so both can be read the same way. Together they
+     give the band's thickness at any x — which is what keeps an item
+     inside the shape instead of standing on top of it. */
+  var TOP_EDGE = [
+    [   3,  72,   45,  40,   92,  10,  128,   5],
+    [ 128,   5,  168,   0,  240,  38,  320,  68],
+    [ 320,  68,  390,  94,  458, 105,  525, 105],
+    [ 525, 105,  592, 105,  660,  94,  730,  68],
+    [ 730,  68,  810,  38,  882,   0,  922,   5],
+    [ 922,   5,  962,  10, 1020,  55, 1048, 110]
+  ];
+
+  var BOTTOM_EDGE = [
+    [   3,  72,   20,  85,   44,  99,   74, 116],
+    [  74, 116,  175, 172,  330, 228,  525, 228],
+    [ 525, 228,  720, 228,  940, 194, 1024, 146],
+    [1024, 146, 1046, 133, 1054, 122, 1048, 110]
+  ];
+
+  function sampler(segs) {
+    var pts = [];
+    segs.forEach(function (c) {
+      for (var i = 0; i <= 24; i++) {
+        var t = i / 24, u = 1 - t;
+        pts.push([
+          u*u*u*c[0] + 3*u*u*t*c[2] + 3*u*t*t*c[4] + t*t*t*c[6],
+          u*u*u*c[1] + 3*u*u*t*c[3] + 3*u*t*t*c[5] + t*t*t*c[7]
+        ]);
+      }
+    });
+    return function (x) {
+      for (var i = 1; i < pts.length; i++) {
+        if (pts[i][0] >= x) {
+          var a = pts[i - 1], b = pts[i];
+          var f = b[0] === a[0] ? 0 : (x - a[0]) / (b[0] - a[0]);
+          return a[1] + (b[1] - a[1]) * f;
+        }
+      }
+      return pts[pts.length - 1][1];
+    };
+  }
+
+  var topY = sampler(TOP_EDGE);
+  var botY = sampler(BOTTOM_EDGE);
+
+  var ITEM_H = 84;                     /* every item this tall, in scene units */
+  var SEAT   = { x0: 120, x1: 960 };   /* where the band is thick enough to hold them */
+
+  function layItems() {
+    Array.prototype.forEach.call(tableScene.querySelectorAll(".item"), function (n) {
+      n.remove();
+    });
+
+    var n      = ITEMS.length;
+    var widths = ITEMS.map(function (it) { return ITEM_H * it.ratio; });
+    var a      = SEAT.x0 + widths[0] / 2;
+    var b      = SEAT.x1 - widths[n - 1] / 2;
+
+    ITEMS.forEach(function (it, i) {
+      var cx = n > 1 ? a + (b - a) * (i / (n - 1)) : (a + b) / 2;
+      var w  = widths[i];
+
+      /* Measure the band across the item's whole width, not just its
+         centre, and take the tightest reading. Centring it in that gap
+         means no corner of the item can poke through either edge. */
+      var xs   = [cx - w / 2, cx, cx + w / 2];
+      var lid   = Math.max(topY(xs[0]), topY(xs[1]), topY(xs[2]));
+      var floor = Math.min(botY(xs[0]), botY(xs[1]), botY(xs[2]));
+      var bottom = (lid + floor) / 2 + ITEM_H / 2;
+
+      var img = document.createElement("img");
+      img.className = "item";
+      img.src = it.src;
+      img.alt = "";
+      img.style.aspectRatio = String(it.ratio);
+      img.style.width = (w / SCENE.w * 100) + "%";
+      img.style.left  = (cx / SCENE.w * 100) + "%";
+      img.style.top   = (bottom / SCENE.h * 100) + "%";
+      tableScene.appendChild(img);
+    });
+  }
+
+  /* a character reacts, then goes quiet again */
+  var bubbleTimers = {};
+
+  function react(eater) {
+    var who   = eater.dataset.who;
+    var lines = RESPONSES[who] || ["thank you"];
+    var b     = eater.querySelector(".eater-bubble");
+
+    if (!b) {
+      b = document.createElement("div");
+      b.className = "bubble eater-bubble";
+      /* characters on the right get the tail mirrored to their side */
+      if (eater.classList.contains("eater--flip")) b.classList.add("bubble--flip");
+      eater.appendChild(b);
+    }
+
+    buildBubble(b, lines[Math.floor(Math.random() * lines.length)]);
+    void b.offsetWidth;
+    b.classList.add("show");
+    eater.classList.add("eater--munch");
+
+    clearTimeout(bubbleTimers[who]);
+    bubbleTimers[who] = setTimeout(function () {
+      b.classList.remove("show");
+      eater.classList.remove("eater--munch");
+    }, 2200);
+  }
+
+  /* pick an item up, carry it, drop it on a face */
+  var drag = null;
+
+  gameStage.addEventListener("pointerdown", function (e) {
+    var item = e.target.closest(".item");
+    if (!item) return;
+    e.preventDefault();
+
+    drag = { item: item, startX: e.clientX, startY: e.clientY };
+    item.classList.add("dragging");
+    item.setPointerCapture(e.pointerId);
+  });
+
+  gameStage.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    /* Carried by transform, never by left/top — the % seat underneath
+       stays exactly as laid, so letting go always returns it to the curve. */
+    drag.item.style.transform =
+      "translate(" + (e.clientX - drag.startX) + "px," +
+                     (e.clientY - drag.startY) + "px) scale(1.1)";
+  });
+
+  function endDrag(e) {
+    if (!drag) return;
+    var item = drag.item;
+    item.classList.remove("dragging");
+
+    var box = item.getBoundingClientRect();
+    var cx  = box.left + box.width  / 2;
+    var cy  = box.top  + box.height / 2;
+
+    var fed = null;
+    Array.prototype.forEach.call(gameStage.querySelectorAll(".eater"), function (eater) {
+      if (fed) return;
+      var f = eater.getBoundingClientRect();
+      var r = f.width / 2;
+      var dx = cx - (f.left + r);
+      var dy = cy - (f.top + f.height / 2);
+      if (Math.sqrt(dx * dx + dy * dy) < r) fed = eater;
+    });
+
+    if (fed) {
+      /* shrink away where it was dropped, not back at its seat */
+      var held = item.style.transform.replace(" scale(1.1)", "");
+      item.classList.add("eaten");
+      item.style.transform = held + " scale(0.3)";
+      setTimeout(function () { item.remove(); }, 260);
+      react(fed);
+    } else {
+      /* nothing there — the transform drops away and it eases home */
+      item.style.transform = "";
+    }
+
+    drag = null;
+  }
+
+  gameStage.addEventListener("pointerup", endDrag);
+  gameStage.addEventListener("pointercancel", endDrag);
+
+  /* ---------- navigation ---------- */
+  var VIEWS = {
+    home:    document.getElementById("viewHome"),
+    gallery: document.getElementById("viewGallery"),
+    game:    document.getElementById("viewGame"),
+    author:  document.getElementById("viewAuthor")
+  };
+
+  function go(where) {
+    Object.keys(VIEWS).forEach(function (k) {
+      VIEWS[k].hidden = k !== where;
+    });
+    if (where === "game")   layItems();      /* a fresh table each visit */
+    if (where === "author") showPicker();    /* always back to the languages */
+  }
+
+  document.getElementById("startBtn").addEventListener("click", function () {
+    go("gallery");
+  });
+
+  document.querySelectorAll(".menu button[data-go]").forEach(function (b) {
+    b.addEventListener("click", function () { go(b.dataset.go); });
+  });
+
+  /* ---------- story overlay ---------- */
+  var stage       = document.querySelector(".stage");
+  var story       = document.getElementById("story");
+  var storyPhoto  = document.getElementById("storyPhoto");
+  var narratorEl  = document.getElementById("narratorText");
+  var measureEl   = document.getElementById("narratorMeasure");
+  var MAX_LINES   = 3;
+  var typeTimer   = null;
+  var pageTimer   = null;
+
+  /* break the narration into pages of at most 3 rendered lines */
+  function paginate(text) {
+    var lineH = parseFloat(getComputedStyle(measureEl).lineHeight) || 32;
+    var words = text.split(" ");
+    var pages = [];
+    var cur   = "";
+    var i     = 0;
+
+    while (i < words.length) {
+      var next = cur ? cur + " " + words[i] : words[i];
+      measureEl.textContent = next;
+
+      if (Math.round(measureEl.scrollHeight / lineH) > MAX_LINES && cur) {
+        pages.push(cur);   /* this page is full — skip on and keep typing */
+        cur = "";
+      } else {
+        cur = next;
+        i++;
+      }
+    }
+
+    if (cur) pages.push(cur);
+    measureEl.textContent = "";
+    return pages;
+  }
+
+  function typeStory(text) {
+    clearTimeout(typeTimer);
+    clearTimeout(pageTimer);
+
+    var chunks = Object.prototype.toString.call(text) === "[object Array]" ? text : [text];
+    var pages  = [];
+    chunks.forEach(function (c) { pages = pages.concat(paginate(c)); });
+
+    var page = 0;
+
+    function typePage() {
+      var full = pages[page];
+      var i    = 0;
+      narratorEl.textContent = "";
+
+      (function step() {
+        if (i <= full.length) {
+          narratorEl.textContent = full.slice(0, i);
+          narratorEl.appendChild(caret());
+          i++;
+          typeTimer = setTimeout(step, 26);
+          return;
+        }
+        if (page < pages.length - 1) {
+          page++;
+          pageTimer = setTimeout(typePage, 1500);
+        }
+      })();
+    }
+
+    typePage();
+  }
+
+  function caret() {
+    var c = document.createElement("span");
+    c.className = "caret";
+    return c;
+  }
+
+  function openStory(key) {
+    var s = STORIES[key];
+    if (!s) return;
+
+    storyPhoto.innerHTML = "";
+    storyPhoto.classList.toggle("story-photo--multi", s.photos.length > 1);
+    storyPhoto.style.setProperty("--cols", s.photos.length);
+    s.photos.forEach(function (src) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = s.alt;
+      storyPhoto.appendChild(img);
+    });
+
+    story.hidden = false;
+    stage.classList.add("story-open");
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { typeStory(s.text); });
+    } else {
+      typeStory(s.text);
+    }
+  }
+
+  function closeStory() {
+    clearTimeout(typeTimer);
+    clearTimeout(pageTimer);
+    story.hidden = true;
+    stage.classList.remove("story-open");
+    narratorEl.textContent = "";
+  }
+
+  /* the close button is the only exit — no backdrop click, no Escape */
+  document.getElementById("storyClose").addEventListener("click", closeStory);
+
+  shuffleBubble(true);
+  render();
+</script>
+</body>
+</html>
