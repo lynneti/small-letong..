@@ -801,6 +801,55 @@
     pointer-events: none;
   }
 
+  /* ================= SUPPORT ================= */
+
+  .support {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.08);      /* 8% darker */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .support-card {
+    position: relative;
+    width: 520px;
+    max-width: calc(100% - 48px);
+    max-height: calc(100% - 48px);
+    padding: 40px 40px 36px;
+    border: 2px solid #000;
+    border-radius: 28px;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    overflow: auto;
+  }
+
+  .support-card h2 {
+    margin: 0;
+    color: #000;
+    text-align: center;
+    font-family: "Irish Grover", cursive;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .support-card img {
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+  }
+
   /* ================= STORY OVERLAY ================= */
 
   /* the calendar, month row and weekday row go soft behind the story */
@@ -889,8 +938,9 @@
     left: -9999px;
   }
 
-  /* close button — the only way out of the story */
-  .story-close {
+  /* close button — shared by the story and support overlays */
+  .story-close,
+  .support-close {
     position: absolute;
     top: 24px;
     right: 24px;
@@ -908,15 +958,18 @@
     animation: breathe 2.6s ease-in-out infinite;
   }
 
-  .story-close svg { width: 22px; height: 22px; display: block; }
+  .story-close svg,
+  .support-close svg { width: 22px; height: 22px; display: block; }
 
-  .story-close line {
+  .story-close line,
+  .support-close line {
     stroke: #000;
     stroke-width: 2.4;
     stroke-linecap: round;
   }
 
-  .story-close:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+  .story-close:focus-visible,
+  .support-close:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
 
   @keyframes breathe {
     0%, 100% { transform: scale(1); }
@@ -937,7 +990,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .caret { animation: none; }
-    .story-close { animation: none; }
+    .story-close, .support-close { animation: none; }
   }
 </style>
 </head>
@@ -1068,6 +1121,20 @@
 
       </div>
     </section>
+
+    <!-- ============ SUPPORT ============ -->
+    <div class="support" id="support" hidden>
+      <div class="support-card">
+        <button class="support-close" id="supportClose" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="7" y1="7" x2="17" y2="17" />
+            <line x1="17" y1="7" x2="7" y2="17" />
+          </svg>
+        </button>
+        <h2>Please support if you like this website.<br />(Rupiah is not accepted..lol)</h2>
+        <img src="assets/payment.jpg" alt="WeChat Pay QR code" />
+      </div>
+    </div>
 
     <!-- ============ STORY OVERLAY ============ -->
     <div class="story" id="story" hidden>
@@ -1394,7 +1461,7 @@
     { src: "assets/item-09.png", ratio: 117 / 159 },
     { src: "assets/item-10.png", ratio: 228 / 130 },
     { src: "assets/badge-rednote.png",       ratio: 1 },
-    { src: "assets/item-sticky.png",      ratio: 1 }
+    { src: "assets/item-sticky.png",      ratio: 1, opens: "support" }
   ];
 
   /* placeholder lines — swap these for whatever each of them would say */
@@ -1491,6 +1558,7 @@
       img.className = "item";
       img.src = it.src;
       img.alt = "";
+      if (it.opens) img.dataset.opens = it.opens;
       img.style.aspectRatio = String(it.ratio);
       img.style.width = (w / SCENE.w * 100) + "%";
       img.style.left  = (cx / SCENE.w * 100) + "%";
@@ -1535,13 +1603,15 @@
     if (!item) return;
     e.preventDefault();
 
-    drag = { item: item, startX: e.clientX, startY: e.clientY };
+    drag = { item: item, startX: e.clientX, startY: e.clientY, moved: 0 };
     item.classList.add("dragging");
     item.setPointerCapture(e.pointerId);
   });
 
   gameStage.addEventListener("pointermove", function (e) {
     if (!drag) return;
+    drag.moved = Math.abs(e.clientX - drag.startX) +
+                 Math.abs(e.clientY - drag.startY);
     /* Carried by transform, never by left/top — the % seat underneath
        stays exactly as laid, so letting go always returns it to the curve. */
     drag.item.style.transform =
@@ -1553,6 +1623,14 @@
     if (!drag) return;
     var item = drag.item;
     item.classList.remove("dragging");
+
+    /* barely moved? that was a tap, not a drag — open what it opens */
+    if (drag.moved < 6 && item.dataset.opens === "support") {
+      item.style.transform = "";
+      drag = null;
+      support.hidden = false;
+      return;
+    }
 
     var box = item.getBoundingClientRect();
     var cx  = box.left + box.width  / 2;
@@ -1586,6 +1664,13 @@
   gameStage.addEventListener("pointerup", endDrag);
   gameStage.addEventListener("pointercancel", endDrag);
 
+  /* ---------- support ---------- */
+  var support = document.getElementById("support");
+
+  document.getElementById("supportClose").addEventListener("click", function () {
+    support.hidden = true;
+  });
+
   /* ---------- navigation ---------- */
   var VIEWS = {
     home:    document.getElementById("viewHome"),
@@ -1598,6 +1683,7 @@
     Object.keys(VIEWS).forEach(function (k) {
       VIEWS[k].hidden = k !== where;
     });
+    support.hidden = true;
     if (where === "game")   layItems();      /* a fresh table each visit */
     if (where === "author") showPicker();    /* always back to the languages */
   }
